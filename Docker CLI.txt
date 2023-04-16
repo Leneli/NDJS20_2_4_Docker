@@ -1,0 +1,63 @@
+#0. авторизоваться на hub.docker.com
+
+#1. ->  docker pull busybox
+    <-  Using default tag: latest
+	latest: Pulling from library/busybox
+	Digest: sha256:b5d6fe0712636ceb7430189de28819e195e8966372edfc2d9409d79402a0dc16
+	Status: Image is up to date for busybox:latest
+	docker.io/library/busybox:latest
+
+#2. ->	docker run --name pinger -i -t busybox ping netology.ru
+    <-	PING netology.ru (188.114.99.229): 56 data bytes
+	64 bytes from 188.114.99.229: seq=0 ttl=36 time=99.500 ms
+	64 bytes from 188.114.99.229: seq=1 ttl=36 time=139.887 ms
+	64 bytes from 188.114.99.229: seq=2 ttl=36 time=113.548 ms
+	64 bytes from 188.114.99.229: seq=3 ttl=36 time=122.838 ms
+	64 bytes from 188.114.99.229: seq=4 ttl=36 time=126.024 ms
+	64 bytes from 188.114.99.229: seq=5 ttl=36 time=104.679 ms
+	64 bytes from 188.114.99.229: seq=6 ttl=36 time=127.511 ms
+
+#3. ->	docker ps -a
+    <-	CONTAINER ID   IMAGE     COMMAND              CREATED              STATUS              PORTS     NAMES
+	3355c79eb5c7   busybox   "ping netology.ru"   About a minute ago   Up About a minute             pinger
+
+#4. ->	docker logs -t --tail 7 pinger
+    <-	2023-04-16T15:11:55.186026757Z 64 bytes from 188.114.99.229: seq=312 ttl=36 time=125.277 ms
+	2023-04-16T15:11:56.179352632Z 64 bytes from 188.114.99.229: seq=313 ttl=36 time=114.511 ms
+	2023-04-16T15:11:57.227391675Z 64 bytes from 188.114.99.229: seq=314 ttl=36 time=161.224 ms
+	2023-04-16T15:11:58.204612008Z 64 bytes from 188.114.99.229: seq=315 ttl=36 time=137.782 ms
+	2023-04-16T15:11:59.260654092Z 64 bytes from 188.114.99.229: seq=316 ttl=36 time=193.407 ms
+	2023-04-16T15:12:00.186173884Z 64 bytes from 188.114.99.229: seq=317 ttl=36 time=116.110 ms
+	2023-04-16T15:12:01.215018343Z 64 bytes from 188.114.99.229: seq=318 ttl=36 time=142.039 ms
+
+#5. ->	docker stop pinger
+    <-	pinger
+    ->	docker start pinger
+    <-	pinger
+
+#6. ->	docker ps -a
+    <-	CONTAINER ID   IMAGE     COMMAND              CREATED          STATUS          PORTS     NAMES
+	3355c79eb5c7   busybox   "ping netology.ru"   12 minutes ago   Up 12 seconds             pinger
+
+#7. ->	docker logs -t -f pinger
+    <-	2023-04-16T15:06:42.041109167Z PING netology.ru (188.114.99.229): 56 data bytes
+	2023-04-16T15:06:42.140831376Z 64 bytes from 188.114.99.229: seq=0 ttl=36 time=99.500 ms
+	2023-04-16T15:06:43.186829210Z 64 bytes from 188.114.99.229: seq=1 ttl=36 time=139.887 ms
+	2023-04-16T15:06:44.162747918Z 64 bytes from 188.114.99.229: seq=2 ttl=36 time=113.548 ms
+	2023-04-16T15:06:45.174364627Z 64 bytes from 188.114.99.229: seq=3 ttl=36 time=122.838 ms
+	2023-04-16T15:06:46.178637253Z 64 bytes from 188.114.99.229: seq=4 ttl=36 time=126.024 ms
+	2023-04-16T15:06:47.158448253Z 64 bytes from 188.114.99.229: seq=5 ttl=36 time=104.679 ms
+	...
+
+#8. <-	seq=5
+
+#9. ->	docker rm -f pinger
+    <-	pinger
+    ->	docker ps -a
+    <-	CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+#10.->	docker rmi busybox
+    <-	Untagged: busybox:latest
+	Untagged: busybox@sha256:b5d6fe0712636ceb7430189de28819e195e8966372edfc2d9409d79402a0dc16
+	Deleted: sha256:3fbaf71a998bae6e375be74b999bd418091bf6511e356a129fdc969c4a94a5bc
+	Deleted: sha256:416052d13ad7f11c2b56249c179249f1ce37b0e1caf453bb037d863fd2588072
