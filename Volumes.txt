@@ -1,0 +1,114 @@
+#1. ->	docker pull node:15.14
+    <-	
+
+
+
+
+#2. ->	docker run --name first_node -i -t -d -v ~/Documents/GitHub/NDJS20_2_4_Docker/data:/var/first/data node:15.14 /bin/sh
+    <-	
+# ls
+bin  boot  dev	etc  home  lib	media  mnt  opt  proc  root  run  sbin	srv  sys  tmp  usr  var
+# cd var
+# ls
+backups  cache	first  lib  local  lock  log  mail  opt  run  spool  tmp
+# cd first
+# ls
+data
+# 
+
+
+
+
+#3. ->	docker run --name second_node -i -t -d -v ~/Documents/GitHub/NDJS20_2_4_Docker/data:/var/second/data node:15.14 /bin/sh
+    <-	
+# ls
+bin  boot  dev	etc  home  lib	media  mnt  opt  proc  root  run  sbin	srv  sys  tmp  usr  var
+# cd var
+# ls
+backups  cache	lib  local  lock  log  mail  opt  run  second  spool  tmp
+# cd second
+# ls
+data
+# 
+
+    ->	docker ps
+    <-	CONTAINER ID   IMAGE        COMMAND                  CREATED          STATUS         PORTS     NAMES
+	d5540e49b8c6   node:15.14   "docker-entrypoint.s…"   About a minute ago   Up 5 seconds             second_node
+	bf4a034ea8ed   node:15.14   "docker-entrypoint.s…"   2 minutes ago        Up 5 seconds             first_node
+
+
+
+
+#4. ->	docker exec -it first_node touch /var/first/data/first_node.txt
+    ->	docker exec -it first_node echo "Hello, Docker (from first_node)" /var/first/data/first_node.txt
+    ->	docker exec -it first_node /bin/sh
+    <-	
+# ls
+bin  boot  dev	etc  home  lib	media  mnt  opt  proc  root  run  sbin	srv  sys  tmp  usr  var
+# cd var/first/data
+# ls
+first_node.txt	test.txt
+# echo "Hello from first_node :)" >>first_node.txt
+# 
+
+
+
+
+#5. ->	test.txt (Hello, Docker!)
+
+
+
+
+
+#6. ->	docker exec -it second_node ls var/second/data
+    <-	first_node.txt	test.txt
+    ->	docker exec -it second_node cat var/second/data/test.txt
+    <-	Hello, Docker!%   
+    ->	docker exec -it second_node cat var/second/data/first_node.txt
+    <-	Hello from first_node :)
+
+
+
+
+#7. ->	docker ps
+    <-	CONTAINER ID   IMAGE        COMMAND                  CREATED          STATUS          PORTS     NAMES
+	d5540e49b8c6   node:15.14   "docker-entrypoint.s…"   29 minutes ago   Up 28 minutes             second_node
+	bf4a034ea8ed   node:15.14   "docker-entrypoint.s…"   30 minutes ago   Up 28 minutes             first_node
+    ->	docker stop first_node second_node
+    <-	first_node
+	second_node
+    ->	docker ps -a
+    <-	CONTAINER ID   IMAGE        COMMAND                  CREATED          STATUS                        PORTS     NAMES
+	d5540e49b8c6   node:15.14   "docker-entrypoint.s…"   31 minutes ago   Exited (137) 12 seconds ago             second_node
+	bf4a034ea8ed   node:15.14   "docker-entrypoint.s…"   32 minutes ago   Exited (137) 12 seconds ago             first_node
+
+
+
+
+#8. ->	docker rm first_node second_node
+    <-	first_node
+	second_node
+    ->	docker ps -a
+    <-	CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+
+
+
+#9. ->	docker images
+    <-	REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+	node         15.14     c9b1cc6b5379   22 months ago   885MB
+    ->	docker rmi node:15.14
+    <-	Untagged: node:15.14
+	Untagged: node@sha256:608bba799613b1ebf754034ae008849ba51e88b23271412427b76d60ae0d0627
+	Deleted: sha256:c9b1cc6b53791ec5df6210b2d454d12b7a2f181f0a6b0e8f1210c8386473eba7
+	Deleted: sha256:f0dc5ef6846f0abefa37bc88337c02110e9e238881415ca1871dc2607b786342
+	Deleted: sha256:784ab9e2e6829251f4fb254d6316e01a98614d225f7cb9c58e2ac6a1ee4797a0
+	Deleted: sha256:9c7f8185bbc7e06911cf165c28a5807eb0192b2ac627ae633f171af40bd235dd
+	Deleted: sha256:ddc8c8426aa1933fa5d32a4da29e98ca985692706afa2f1c60975e749ec36aa1
+	Deleted: sha256:c413e10d9fb99f013b730701affa6aadbec9450a668f993b6c950031c62a1f16
+	Deleted: sha256:87bf19dbb220eb26f2ee81fdf55d72defc3e924a964e74f0e69fc358fa3c42cf
+	Deleted: sha256:be106a4e95a9b1906e0289515498911495c3027a49570c4c1f7629aa6e7eb33b
+	Deleted: sha256:2e550512412623943f8abceb74a40d22e4407bce50f418bda0375a4aaa51b075
+	Deleted: sha256:5a4eda0f02e647b06a20c608c6c130e1058c6415e2b223acefaa43b6c464aa1b
+    ->	docker images
+    <-	REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
